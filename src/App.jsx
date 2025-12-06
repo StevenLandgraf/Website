@@ -13,7 +13,10 @@ import {
   Users,
   Zap,
   ArrowRight,
-  ScrollText
+  ScrollText,
+  Headphones,
+  Music,
+  Guitar
 } from 'lucide-react';
 
 const PROFILE = {
@@ -46,6 +49,34 @@ const PHILOSOPHY = [
     bg: "bg-amber-500/10",
     border: "border-amber-500/20",
     description: "Great research shouldn't stay a proof of concept. I bridge the gap between mathematical theory and production code. From optimizing model architectures to building reproducible Docker pipelines, I ensure that cutting-edge algorithms run efficiently in the real world."
+  },
+  {
+    title: "Teamwork as a Multiplier",
+    icon: Users,
+    color: "text-blue-400",
+    bg: "bg-blue-500/10",
+    border: "border-blue-500/20",
+    description: "Having successfully supervised over a dozen of theses and managed multiple industry projects, I have learned that collaboration is key. I empower students and peers to take ownership, turning individual potential into collective innovation."
+  }
+];
+
+const HOBBIES = [
+  {
+    title: "In Collapse We Rise (Metalcore Band)",
+    role: "Songwriter, Instrumentalist, Producer",
+    year: "2025 - Present",
+    description: "I'm the founder and leader of the independent metalcore band **In Collapse We Rise**.",
+    image: "/band_cover.jpg", // The image file name
+    project: {
+      name: "Echoes of the Aftermath (EP)",
+      date: "Released 12/2025",
+      details: [
+        "Composed, arranged, and produced 6 original tracks, managing the full audio pipeline from initial composition to final mastering.",
+        "Engineered all guitar, bass, and vocal tracking sessions.",
+        "Managed the digital distribution and promotional artwork for the release."
+      ],
+      link: "#music-link-placeholder" // Placeholder for an actual music link (e.g., Spotify/Bandcamp)
+    }
   },
   {
     title: "Teamwork as a Multiplier",
@@ -298,6 +329,7 @@ const navLinks = [
   { name: 'Experience & Education', href: '#cv' },
   { name: 'Philosophy', href: '#philosophy' },
   { name: 'Publications', href: '#publications' },
+  { name: 'Projects', href: '#hobbies' },
 ];
 
 const NavBar = () => {
@@ -406,6 +438,70 @@ const TimelineItem = ({ title, place, year, children, last = false }) => (
   </div>
 );
 
+const HobbyProjectCard = ({ hobby }) => (
+  <GlassCard className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start h-full">
+    <div className="lg:col-span-1 w-full flex flex-col items-center">
+      <div className="w-full aspect-square overflow-hidden rounded-xl mb-4 border border-slate-700/50 shadow-xl">
+         <img
+          src="/band_cover.jpg"
+          alt="In Collapse We Rise Photo"
+          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/400x400/1e293b/94a3b8?text=Band+Photo"; }}
+        />
+      </div>
+      <span className="text-purple-400 font-mono text-sm tracking-widest">{hobby.year}</span>
+    </div>
+
+    <div className="lg:col-span-2 space-y-4">
+      <div className="flex items-center gap-3">
+        <Headphones className="text-cyan-400" size={32} />
+        <h3 className="text-2xl font-bold text-white">{hobby.title}</h3>
+      </div>
+      <p className="text-xl text-purple-300 font-medium">{hobby.role}</p>
+
+      <p className="text-slate-400 leading-relaxed text-justify pb-4 border-b border-slate-700/50">
+        {hobby.description.split('**').map((part, index) => {
+          if (index % 2 !== 0) {
+            return <strong key={index} className="text-white font-bold">{part}</strong>;
+          }
+          return part;
+        })}
+      </p>
+
+      {hobby.project && (
+        <div className="pt-4">
+          <h4 className="text-lg font-bold text-cyan-400 mb-3 flex items-center gap-2">
+            <Music size={18} /> {hobby.project.name} <span className="text-slate-500 text-sm font-mono ml-2">({hobby.project.date})</span>
+          </h4>
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="w-24 h-24 flex-shrink-0">
+               <img
+                  // Using a mock image URL for the album cover (album_cover.jpg)
+                  src="/ep_1.jpg"
+                  alt="EP 1album cover"
+                  className="w-full h-full object-cover rounded-md border border-slate-700"
+                  onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/96x96/1e293b/94a3b8?text=Cover"; }}
+                />
+            </div>
+            <ul className="list-disc list-outside ml-6 text-slate-400 text-sm space-y-1">
+              {hobby.project.details.map((detail, i) => <li key={i}>{detail}</li>)}
+            </ul>
+          </div>
+
+          <a
+            href={hobby.project.link}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-6 inline-flex items-center gap-2 px-6 py-2 text-sm bg-cyan-600/10 border border-cyan-500/50 text-cyan-400 rounded-full font-medium hover:bg-cyan-700/20 transition-all duration-300"
+          >
+            Listen Now (coming soon) <ArrowRight size={16} />
+          </a>
+        </div>
+      )}
+    </div>
+  </GlassCard>
+);
+
 export default function App() {
     const [typedText, setTypedText] = useState('');
     const fullText = PROFILE.tagline; 
@@ -469,6 +565,10 @@ export default function App() {
 
             <a href="#publications" className="px-8 py-3 bg-slate-800/50 border border-slate-700 text-slate-300 rounded-full font-medium hover:bg-slate-700 transition-all duration-300 hover:scale-105">
               Publications
+            </a>
+
+            <a href="#hobbies" className="flex items-center gap-2 px-8 py-3 bg-purple-600/10 border border-purple-500/50 text-purple-400 rounded-full font-medium hover:bg-purple-700/20 transition-all duration-300 hover:scale-[1.02] shadow-[0_0_15px_-5px_rgba(168,85,247,0.4)]">
+              <Guitar size={18} /> Projects
             </a>
 
             <a href={PROFILE.links.scholar} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-8 py-3 bg-purple-600/10 border border-purple-500/50 text-purple-400 rounded-full font-medium hover:bg-purple-700/20 transition-all duration-300 hover:scale-[1.02]">
@@ -591,6 +691,14 @@ export default function App() {
               </p>
             </GlassCard>
           ))}
+        </div>
+      </Section>
+
+      <Section id="hobbies" title="Projects">
+        <div className="grid grid-cols-1 gap-8">
+            {HOBBIES.filter(h => h.image).map((hobby, idx) => (
+                <HobbyProjectCard key={idx} hobby={hobby} />
+            ))}
         </div>
       </Section>
 
